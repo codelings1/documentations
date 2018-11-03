@@ -189,3 +189,55 @@ An uncontrolled component works like form elements do outside of React. When a u
 In most cases you should use controlled components.
 
 - Server side rendering in react is when we assign initial state to the components, thus they are loaded from the server side only. When we update the components based on client selecion and make updates for components, that is client side rendering.
+
+- State Updates May Be Asynchronous
+React may batch multiple setState() calls into a single update for performance.
+Because this.props and this.state may be updated asynchronously, you should not rely on their values for calculating the next state.
+For example, this code may fail to update the counter:
+// Wrong
+this.setState({
+  counter: this.state.counter + this.props.increment,
+});
+To fix it, use a second form of setState() that accepts a function rather than an object. That function will receive the previous state as the first argument, and the props at the time the update is applied as the second argument:
+// Correct
+this.setState((state, props) => ({
+  counter: state.counter + props.increment
+}));
+-  Keys Must Only Be Unique Among Siblings
+Keys used within arrays should be unique among their siblings. However they don’t need to be globally unique. We can use the same keys when we produce two different arrays:
+function Blog(props) {
+  const sidebar = (
+    <ul>
+      {props.posts.map((post) =>
+        <li key={post.id}>
+          {post.title}
+        </li>
+      )}
+    </ul>
+  );
+  const content = props.posts.map((post) =>
+    <div key={post.id}>
+      <h3>{post.title}</h3>
+      <p>{post.content}</p>
+    </div>
+  );
+  return (
+    <div>
+      {sidebar}
+      <hr />
+      {content}
+    </div>
+  );
+}
+
+const posts = [
+  {id: 1, title: 'Hello World', content: 'Welcome to learning React!'},
+  {id: 2, title: 'Installation', content: 'You can install React from npm.'}
+];
+ReactDOM.render(
+  <Blog posts={posts} />,
+  document.getElementById('root')
+);
+
+-  Alternatives to Controlled Components
+It can sometimes be tedious to use controlled components, because you need to write an event handler for every way your data can change and pipe all of the input state through a React component. This can become particularly annoying when you are converting a preexisting codebase to React, or integrating a React application with a non-React library. In these situations, you might want to check out uncontrolled components, an alternative technique for implementing input forms.
