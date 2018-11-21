@@ -241,3 +241,21 @@ ReactDOM.render(
 
 -  Alternatives to Controlled Components
 It can sometimes be tedious to use controlled components, because you need to write an event handler for every way your data can change and pipe all of the input state through a React component. This can become particularly annoying when you are converting a preexisting codebase to React, or integrating a React application with a non-React library. In these situations, you might want to check out uncontrolled components, an alternative technique for implementing input forms.
+
+- Ref ... This keyword is used in React components or elements to create new properties or do some changes to the selected element. The ref to the element is passed to this as input and you can use this name to refer to this element.
+	Eg: <div
+                            className="selected-flag-options"
+                            ref={node => {
+                              this.node = node;
+                            }}
+                          >
+	In this example, node has been added as a property of class inside which it is used and node for the input in the function is taken as the reference to this element.
+                          
+We can also create a reference in the constructor using:
+	this.inputElement = React.createRef();
+	
+Then, we can directly use the reference like:
+	ref={this.inputElement}
+
+To focus on the selected element, we use:
+	this.inputElement.current.focus()
